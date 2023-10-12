@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
-import { ReviewService } from './review.service';
+import { ReviewService } from './feedback.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   const result = await ReviewService.insertIntoDB(req.body);
@@ -13,6 +13,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 
 
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
