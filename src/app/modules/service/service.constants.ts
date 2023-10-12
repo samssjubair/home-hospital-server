@@ -1,19 +1,23 @@
-export const studentFilterableFields: string[] = [
+export const homeServiceFilterableFields: string[] = [
   'searchTerm',
   'minPrice',
   'maxPrice',
-  'categoryId'
-];
-
-export const studentSearchableFields: string[] = [
-  'title',
-  'author',
-  'genre'
-];
-
-export const bookRelationalFields: string[] = [
   'categoryId',
+  'organization',
+  'subCategory',
+  'serviceArea',
 ];
-export const bookRelationalFieldsMapper: { [key: string]: string } = {
+
+export const homeServiceSearchableFields: string[] = [
+  'title',
+  'subCategory',
+  'description',
+  'organization',
+  'serviceArea',
+];
+
+export const homeServiceRelationalFields: string[] = ['categoryId'];
+
+export const homeServiceRelationalFieldsMapper: { [key: string]: string } = {
   categoryId: 'category',
 };

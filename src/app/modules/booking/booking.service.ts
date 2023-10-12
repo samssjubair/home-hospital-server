@@ -1,12 +1,12 @@
-import { Book, Order } from '@prisma/client';
+import { Booking } from '@prisma/client';
 import { IGenericResponse } from '../../../interfaces/common';
 
 import prisma from '../../../shared/prisma';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const insertIntoDB = async (data: any): Promise<Order> => {
-  const result = await prisma.order.create({
+const insertIntoDB = async (data: any): Promise<Booking> => {
+  const result = await prisma.booking.create({
     data
   });
   return result;
@@ -27,15 +27,15 @@ const insertIntoDB = async (data: any): Promise<Order> => {
 const getAllFromDB = async (
   role: string | null,
   userId: string | null
-): Promise<IGenericResponse<Order[]>> => {
-  let result: Order[] = [];
+): Promise<IGenericResponse<Booking[]>> => {
+  let result: Booking[] = [];
 
   if (role === 'admin') {
     // If the role is 'admin', fetch all orders
-    result = await prisma.order.findMany();
+    result = await prisma.booking.findMany();
   } else if (role === 'customer' && userId) {
     // If the role is 'customer' and userId is provided, fetch orders for that user
-    result = await prisma.order.findMany({
+    result = await prisma.booking.findMany({
       where: {
         userId: userId,
       },
@@ -48,8 +48,8 @@ const getAllFromDB = async (
 };
 
 
-const getByIdFromDB = async (id: string): Promise<Book | null> => {
-  const result = await prisma.book.findUnique({
+const getByIdFromDB = async (id: string): Promise<Booking | null> => {
+  const result = await prisma.booking.findUnique({
     where: {
       id,
     },
@@ -59,9 +59,9 @@ const getByIdFromDB = async (id: string): Promise<Book | null> => {
 
 const updateById = async (
   id: string,
-  payload: Partial<Book>
-): Promise<Book> => {
-  const result = await prisma.book.update({
+  payload: Partial<Booking>
+): Promise<Booking> => {
+  const result = await prisma.booking.update({
     where: {
       id,
     },
@@ -70,8 +70,8 @@ const updateById = async (
   return result;
 };
 
-const deleteFromDB = async (id: string): Promise<Order> => {
-  const result = await prisma.order.delete({
+const deleteFromDB = async (id: string): Promise<Booking> => {
+  const result = await prisma.booking.delete({
     where: {
       id,
     },
@@ -79,7 +79,7 @@ const deleteFromDB = async (id: string): Promise<Order> => {
   return result;
 };
 
-export const OrderService = {
+export const BookingService = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,

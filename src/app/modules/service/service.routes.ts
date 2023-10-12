@@ -13,7 +13,7 @@ router.get(
 );
 
 router.get('/:id', ServiceController.getByIdFromDB);
-// router.get('/:id/category', ServiceController.getBookFromCategoryId);
+router.get('/:id/category', ServiceController.getServiceFromCategoryId);
 
 router.post(
   '/create-service',

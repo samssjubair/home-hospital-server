@@ -8,7 +8,7 @@ import prisma from '../../../shared/prisma';
 import {
   studentRelationalFields,
   studentRelationalFieldsMapper,
-  studentSearchableFields,
+  categorySearchableFields,
 } from './category.constants';
 // import { IStudentFilterRequest } from './category.interface';
 
@@ -30,7 +30,7 @@ const getAllFromDB = async (
 
   if (searchTerm) {
     andConditions.push({
-      OR: studentSearchableFields.map(field => ({
+      OR: categorySearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
           mode: 'insensitive',

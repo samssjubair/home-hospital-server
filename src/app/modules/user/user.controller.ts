@@ -12,7 +12,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Student created successfully',
+        message: 'User created successfully',
         data: result
     });
 });
@@ -42,11 +42,11 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     const options = pick(req.query, ['size', 'page', 'sortBy', 'sortOrder']);
     const result = await UserService.getAllFromDB(filters, options);
     sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: 'Students fetched successfully',
-        meta: result.meta,
-        data: result.data
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'User fetched successfully',
+      meta: result.meta,
+      data: result.data,
     });
 });
 
@@ -54,10 +54,10 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await UserService.getByIdFromDB(id);
     sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: 'User fetched successfully',
-        data: result
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'User fetched successfully',
+      data: result,
     });
 });
 

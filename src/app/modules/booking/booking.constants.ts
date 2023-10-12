@@ -30,3 +30,5 @@ export const studentRelationalFieldsMapper: { [key: string]: string } = {
   academicDepartmentId: 'academicDepartment',
   academicSemesterId: 'academicSemester',
 };
+
+export const bookingStatuses = ['booked', 'completed', 'canceled'];

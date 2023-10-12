@@ -10,18 +10,19 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(uuid())
-  name       String?
-  email      String    @unique
-  password   String
-  role       Role      @default(user)
-  contactNo  String?
-  address    String?
-  profileImg String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  bookings   Booking[]
-  reviews    Review[]
+  id            String         @id @default(uuid())
+  name          String?
+  email         String         @unique
+  password      String
+  role          Role           @default(user)
+  contactNo     String?
+  address       String?
+  profileImg    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  bookings      Booking[]
+  reviews       Review[]
+  userFeedbacks UserFeedback[]
 }
 
 enum Role {
@@ -33,7 +34,7 @@ enum Role {
 model Category {
   id        String    @id @default(uuid())
   title     String
-  imageUrl String?
+  imageUrl  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   services  Service[]
@@ -64,6 +65,7 @@ model Service {
   bookings     Booking[]
   category     Category? @relation(fields: [categoryId], references: [id])
   categoryId   String?
+  reviews      Review[]
 }
 
 model Booking {
@@ -73,7 +75,7 @@ model Booking {
   serviceId   String
   service     Service       @relation(fields: [serviceId], references: [id])
   appointment DateTime
-  status      BookingStatus
+  status      BookingStatus @default(booked)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   reviews     Review[]
@@ -89,12 +91,51 @@ model Review {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id])
   bookingId String?
   booking   Booking? @relation(fields: [bookingId], references: [id])
   text      String
   rating    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model CMSContent {
+  id          String      @id @default(uuid())
+  contentType ContentType
+  title       String
+  content     String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("cms_content")
+}
+
+enum ContentType {
+  blog_post
+  faq
+  careers
+}
+
+model AboutUsContent {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("about_us_content")
+}
+
+model UserFeedback {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  feedback  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user_feedback")
 }
 
 // // Define the Booking model for tracking user bookings

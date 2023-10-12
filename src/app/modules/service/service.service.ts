@@ -6,11 +6,11 @@ import { IPaginationOptions } from '../../../interfaces/pagination';
 
 import prisma from '../../../shared/prisma';
 import {
-  bookRelationalFields,
-  bookRelationalFieldsMapper,
-  studentSearchableFields
+  homeServiceRelationalFields,
+  homeServiceRelationalFieldsMapper,
+  homeServiceSearchableFields
 } from './service.constants';
-import { IBookFilterRequest } from './service.interface';
+import { IHomeServiceFilterRequest } from './service.interface';
 
 const insertIntoDB = async (data: Service): Promise<Service> => {
   const result = await prisma.service.create({
@@ -23,7 +23,7 @@ const insertIntoDB = async (data: Service): Promise<Service> => {
 };
 
 const getAllFromDB = async (
-  filters: IBookFilterRequest,
+  filters: IHomeServiceFilterRequest,
   options: IPaginationOptions
 ): Promise<IGenericResponse<Service[]>> => {
   const { size, page, skip } = paginationHelpers.calculatePagination(options);
@@ -33,7 +33,7 @@ const getAllFromDB = async (
 
   if (searchTerm) {
     andConditions.push({
-      OR: studentSearchableFields.map(field => ({
+      OR: homeServiceSearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
           mode: 'insensitive',
@@ -45,9 +45,9 @@ const getAllFromDB = async (
   if (Object.keys(filterData).length > 0) {
     andConditions.push({
       AND: Object.keys(filterData).map(key => {
-        if (bookRelationalFields.includes(key)) {
+        if (homeServiceRelationalFields.includes(key)) {
           return {
-            [bookRelationalFieldsMapper[key]]: {
+            [homeServiceRelationalFieldsMapper[key]]: {
               id: (filterData as any)[key],
             },
           };
@@ -63,13 +63,6 @@ const getAllFromDB = async (
     });
   }
 
-  // if(filterData.category) {
-  //   andConditions.push({
-  //     categoryId: {
-  //       id: filterData.category,
-  //     },
-  //   });
-  // }
 
   
 
@@ -107,9 +100,22 @@ const getByIdFromDB = async (id: string): Promise<Service | null> => {
     where: {
       id,
     },
+    include:{
+      category: true,
+      reviews: true,
+    }
   });
   return result;
 };
+
+const getServiceFromCategoryId= async (id: string): Promise<Service[] | null> => {
+  const result = await prisma.service.findMany({
+    where: {
+      categoryId: id,
+    },
+  });
+  return result;
+}
 
 
 
@@ -141,5 +147,5 @@ export const HomeServiceService = {
   getByIdFromDB,
   updateById,
   deleteFromDB,
-  // getBookFromCategoryId
+  getServiceFromCategoryId
 };

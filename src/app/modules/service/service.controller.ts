@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { studentFilterableFields } from './service.constants';
+import { homeServiceFilterableFields } from './service.constants';
 import { HomeServiceService } from './service.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
@@ -17,9 +17,10 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-  const filters = pick(req.query, studentFilterableFields);
+  const filters = pick(req.query, homeServiceFilterableFields);
   const options = pick(req.query, ['size', 'size', 'sortBy', 'sortOrder']);
-  const result = await HomeServiceService.getAllFromDB(filters, options);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result = await HomeServiceService.getAllFromDB(filters as any, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -40,16 +41,16 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// const getBookFromCategoryId= catchAsync(async (req: Request, res: Response)=>{
-//   const { id } = req.params;
-//   const result = await HomeServiceService.getBookFromCategoryId(id);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Service fetched successfully Using CategoryId',
-//     data: result,
-//   });
-// })
+const getServiceFromCategoryId= catchAsync(async (req: Request, res: Response)=>{
+  const { id } = req.params;
+  const result = await HomeServiceService.getServiceFromCategoryId(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Service fetched successfully Using CategoryId',
+    data: result,
+  });
+})
 
 const updateIntoDb = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -80,5 +81,5 @@ export const ServiceController = {
   getByIdFromDB,
   updateIntoDb,
   deleteFromDB,
-  // getBookFromCategoryId,
+  getServiceFromCategoryId,
 };

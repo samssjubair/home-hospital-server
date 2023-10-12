@@ -2,14 +2,14 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
-import { OrderService } from './order.service';
+import { BookingService } from './booking.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await OrderService.insertIntoDB(req.body);
+  const result = await BookingService.insertIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Order created successfully',
+    message: 'Booking created successfully',
     data: result,
   });
 });
@@ -17,14 +17,14 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
 
   // const filters = pick(req.query, studentFilterableFields);
-  // const options = pick(req.query, ['size', 'page', 'sortBy', 'sortOrder']);
+  // const options = pick(req.query, ['size', 'page', 'sortBy', 'sortBooking']);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const {role, id}= req.user as any;
-  const result = await OrderService.getAllFromDB(role,id);
+  const result = await BookingService.getAllFromDB(role,id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Order fetched successfully',
+    message: 'Booking fetched successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -32,11 +32,11 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
 
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await OrderService.getByIdFromDB(id);
+  const result = await BookingService.getByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Order fetched successfully',
+    message: 'Booking fetched successfully',
     data: result,
   });
 });
@@ -44,27 +44,27 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
 const updateIntoDb = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const payload = req.body;
-  const result = await OrderService.updateById(id, payload);
+  const result = await BookingService.updateById(id, payload);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Order updated successfully',
+    message: 'Booking updated successfully',
     data: result,
   });
 });
 
 const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await OrderService.deleteFromDB(id);
+  const result = await BookingService.deleteFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Order deleted successfully',
+    message: 'Booking deleted successfully',
     data: result,
   });
 });
 
-export const OrderController = {
+export const BookingController = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
