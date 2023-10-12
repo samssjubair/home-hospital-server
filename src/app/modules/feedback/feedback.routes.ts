@@ -2,34 +2,34 @@ import express from 'express';
 import { ENUM_USER_ROLE } from '../../../enums/user';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
-import { ReviewController } from './review.controller';
-import { ReviewValidation } from './review.validations';
+import { FeedbackController } from './feedback.controller';
+import { FeedbackValidation } from './feedback.validations';
 
 const router = express.Router();
 
-// router.get('/', ReviewController.getAllFromDB);
+router.get('/', FeedbackController.getAllFeedback);
 
-router.get('/:id', ReviewController.getByIdFromDB);
-router.get('/:id/service', ReviewController.getReviewFromServiceId);
+router.get('/:id', FeedbackController.getByIdFromDB);
+// router.get('/', FeedbackController.getAllFeedback);
 
 router.post(
-  '/create-service',
-  auth(ENUM_USER_ROLE.ADMIN),
-  validateRequest(ReviewValidation.create),
-  ReviewController.insertIntoDB
+  '/create-feedback',
+  auth(ENUM_USER_ROLE.USER),
+  validateRequest(FeedbackValidation.create),
+  FeedbackController.insertIntoDB
 );
 
 router.patch(
   '/:id',
-  auth(ENUM_USER_ROLE.ADMIN),
-  validateRequest(ReviewValidation.update),
-  ReviewController.updateIntoDb
+  auth(ENUM_USER_ROLE.USER),
+  validateRequest(FeedbackValidation.update),
+  FeedbackController.updateIntoDb
 );
 
 router.delete(
   '/:id',
-  auth(ENUM_USER_ROLE.ADMIN),
-  ReviewController.deleteFromDB
+  auth(ENUM_USER_ROLE.USER),
+  FeedbackController.deleteFromDB
 );
 
-export const reviewRoutes = router;
+export const feedbackRoutes = router;

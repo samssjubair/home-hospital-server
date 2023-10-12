@@ -2,14 +2,14 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
-import { ReviewService } from './feedback.service';
+import { FeedbackService } from './feedback.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await ReviewService.insertIntoDB(req.body);
+  const result = await FeedbackService.insertIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Review added successfully',
+    message: 'Feedback added successfully',
     data: result,
   });
 });
@@ -18,23 +18,22 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await ReviewService.getByIdFromDB(id);
+  const result = await FeedbackService.getByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Review fetched successfully',
+    message: 'Feedback fetched successfully',
     data: result,
   });
 });
 
-const getReviewFromServiceId = catchAsync(
+const getAllFeedback = catchAsync(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await ReviewService.getReviewFromServiceId(id);
+    const result = await FeedbackService.getAllFeedback();
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Review fetched successfully Using Service Id',
+      message: 'Feedback fetched successfully ',
       data: result,
     });
   }
@@ -43,30 +42,30 @@ const getReviewFromServiceId = catchAsync(
 const updateIntoDb = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const payload = req.body;
-  const result = await ReviewService.updateById(id, payload);
+  const result = await FeedbackService.updateById(id, payload);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Review updated successfully',
+    message: 'Feedback updated successfully',
     data: result,
   });
 });
 
 const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await ReviewService.deleteFromDB(id);
+  const result = await FeedbackService.deleteFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Review deleted successfully',
+    message: 'Feedback deleted successfully',
     data: result,
   });
 });
 
-export const ReviewController = {
+export const FeedbackController = {
   insertIntoDB,
   getByIdFromDB,
   updateIntoDb,
   deleteFromDB,
-  getReviewFromServiceId,
+  getAllFeedback,
 };

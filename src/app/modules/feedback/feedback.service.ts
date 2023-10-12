@@ -1,22 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Review, Service } from '@prisma/client';
+import { UserFeedback } from '@prisma/client';
 
 import prisma from '../../../shared/prisma';
 
 
-const insertIntoDB = async (data: Review): Promise<Review> => {
-  const result = await prisma.review.create({
-    data,
-    include: {
-      service: true,
-      booking: true,
-    },
+const insertIntoDB = async (data: UserFeedback): Promise<UserFeedback> => {
+  const result = await prisma.userFeedback.create({
+    data
   });
   return result;
 };
 
-const getByIdFromDB = async (id: string): Promise<Service | null> => {
-  const result = await prisma.service.findUnique({
+const getByIdFromDB = async (id: string): Promise<UserFeedback | null> => {
+  const result = await prisma.userFeedback.findUnique({
     where: {
       id,
     },
@@ -24,20 +20,16 @@ const getByIdFromDB = async (id: string): Promise<Service | null> => {
   return result;
 };
 
-const getReviewFromServiceId = async (id: string): Promise<Review[] | null> => {
-  const result = await prisma.review.findMany({
-    where: {
-      serviceId: id,
-    },
-  });
+const getAllFeedback = async (): Promise<UserFeedback[] | null> => {
+  const result = await prisma.userFeedback.findMany({});
   return result;
 };
 
 const updateById = async (
   id: string,
-  payload: Partial<Review>
-): Promise<Review> => {
-  const result = await prisma.review.update({
+  payload: Partial<UserFeedback>
+): Promise<UserFeedback> => {
+  const result = await prisma.userFeedback.update({
     where: {
       id,
     },
@@ -46,8 +38,8 @@ const updateById = async (
   return result;
 };
 
-const deleteFromDB = async (id: string): Promise<Review> => {
-  const result = await prisma.review.delete({
+const deleteFromDB = async (id: string): Promise<UserFeedback> => {
+  const result = await prisma.userFeedback.delete({
     where: {
       id,
     },
@@ -55,10 +47,10 @@ const deleteFromDB = async (id: string): Promise<Review> => {
   return result;
 };
 
-export const ReviewService = {
+export const FeedbackService = {
   insertIntoDB,
   getByIdFromDB,
   updateById,
   deleteFromDB,
-  getReviewFromServiceId
+  getAllFeedback,
 };
