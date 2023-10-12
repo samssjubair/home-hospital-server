@@ -6,9 +6,9 @@ import { IPaginationOptions } from '../../../interfaces/pagination';
 
 import prisma from '../../../shared/prisma';
 import {
-    studentRelationalFields,
-    studentRelationalFieldsMapper,
-    studentSearchableFields,
+  studentRelationalFields,
+  studentRelationalFieldsMapper,
+  studentSearchableFields,
 } from './category.constants';
 // import { IStudentFilterRequest } from './category.interface';
 
@@ -91,10 +91,7 @@ const getByIdFromDB = async (id: string): Promise<Category | null> => {
   const result = await prisma.category.findUnique({
     where: {
       id,
-    },
-    include: {
-      books: true
-    },
+    }
   });
   return result;
 };

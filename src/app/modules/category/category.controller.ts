@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { studentFilterableFields } from './category.constants';
+import { categoryFilterableFields } from './category.constants';
 import { CategoryService } from './category.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-  const filters = pick(req.query, studentFilterableFields);
+  const filters = pick(req.query, categoryFilterableFields);
   const options = pick(req.query, ['size', 'page', 'sortBy', 'sortOrder']);
   const result = await CategoryService.getAllFromDB(filters, options);
   sendResponse(res, {

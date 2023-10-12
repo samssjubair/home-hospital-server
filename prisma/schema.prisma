@@ -31,39 +31,39 @@ enum Role {
 }
 
 model Category {
-  id            String        @id @default(uuid())
-  title         String
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  subCategories SubCategory[]
-  services      Service[]
+  id        String    @id @default(uuid())
+  title     String
+  imageUrl String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  services  Service[]
 }
 
-model SubCategory {
-  id         String    @id @default(uuid())
-  title      String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  categoryId String
-  category   Category  @relation(fields: [categoryId], references: [id])
-  services   Service[]
-}
+// model SubCategory {
+//   id         String    @id @default(uuid())
+//   title      String
+//   createdAt  DateTime  @default(now())
+//   updatedAt  DateTime  @updatedAt
+//   categoryId String
+//   category   Category  @relation(fields: [categoryId], references: [id])
+//   services   Service[]
+// }
 
 model Service {
-  id            String      @id @default(uuid())
-  title         String
-  department    String?
-  description   String
-  organization  String?
-  serviceArea   String?
-  price         Float
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  subCategoryId String
-  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
-  bookings      Booking[]
-  categories    Category?   @relation(fields: [categoryId], references: [id])
-  categoryId    String?
+  id           String    @id @default(uuid())
+  title        String
+  department   String?
+  subCategory  String?
+  imageUrl     String?
+  description  String
+  organization String?
+  serviceArea  String?
+  price        Float
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  bookings     Booking[]
+  category     Category? @relation(fields: [categoryId], references: [id])
+  categoryId   String?
 }
 
 model Booking {
