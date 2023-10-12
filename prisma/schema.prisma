@@ -1,0 +1,161 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String    @id @default(uuid())
+  name       String?
+  email      String    @unique
+  password   String
+  role       Role      @default(user)
+  contactNo  String?
+  address    String?
+  profileImg String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  bookings   Booking[]
+  reviews    Review[]
+}
+
+enum Role {
+  super_admin
+  admin
+  user
+}
+
+model Category {
+  id            String        @id @default(uuid())
+  title         String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  subCategories SubCategory[]
+  services      Service[]
+}
+
+model SubCategory {
+  id         String    @id @default(uuid())
+  title      String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id])
+  services   Service[]
+}
+
+model Service {
+  id            String      @id @default(uuid())
+  title         String
+  department    String?
+  description   String
+  organization  String?
+  serviceArea   String?
+  price         Float
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  subCategoryId String
+  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
+  bookings      Booking[]
+  categories    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+}
+
+model Booking {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  serviceId   String
+  service     Service       @relation(fields: [serviceId], references: [id])
+  appointment DateTime
+  status      BookingStatus
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  reviews     Review[]
+}
+
+enum BookingStatus {
+  booked
+  completed
+  canceled
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  bookingId String?
+  booking   Booking? @relation(fields: [bookingId], references: [id])
+  text      String
+  rating    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// // Define the Booking model for tracking user bookings
+// model Booking {
+//   id           Int       @id @default(autoincrement())
+//   userId       Int
+//   serviceId    Int
+//   status       String
+//   bookingDate  DateTime
+//   // Add other booking-related fields as needed
+
+//   // Define many-to-one relationships with User and Service
+//   user         User      @relation(fields: [userId], references: [id])
+//   service      Service   @relation(fields: [serviceId], references: [id])
+// }
+
+// // Define the Review model for user reviews and ratings
+// model Review {
+//   id        Int     @id @default(autoincrement())
+//   userId    Int
+//   serviceId Int
+//   rating    Int
+//   comment   String?
+//   // Add other review-related fields as needed
+
+//   // Define many-to-one relationships with User and Service
+//   user      User    @relation(fields: [userId], references: [id])
+//   service   Service @relation(fields: [serviceId], references: [id])
+// }
+
+// model ReviewAndRating {
+//   id        String   @id @default(uuid())
+//   rating    Int
+//   review    String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   userId String
+//   user   User   @relation(fields: [userId], references: [id])
+
+//   bookId String
+//   book   Book   @relation(fields: [bookId], references: [id])
+
+//   @@map("reviews_and_ratings")
+// }
+
+// model Order {
+//   id           String      @id @default(uuid())
+//   status       OrderStatus @default(pending)
+//   orderedBooks Json
+//   createdAt    DateTime    @default(now())
+//   updatedAt    DateTime    @updatedAt
+
+//   userId String
+//   user   User   @relation(fields: [userId], references: [id])
+
+//   @@map("orders")
+// }
+
+// enum OrderStatus {
+//   pending
+//   shipped
+//   delivered
+// }
