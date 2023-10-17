@@ -9,11 +9,10 @@ const router = express.Router();
 
 router.get(
   '/',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
   CategoryController.getAllFromDB
 );
 
-router.get('/:id',auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), CategoryController.getByIdFromDB);
+router.get('/:id',CategoryController.getByIdFromDB);
 
 router.post(
   '/create-category',

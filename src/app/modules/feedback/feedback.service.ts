@@ -16,12 +16,15 @@ const getByIdFromDB = async (id: string): Promise<UserFeedback | null> => {
     where: {
       id,
     },
+    include:{
+      user:true
+    }
   });
   return result;
 };
 
 const getAllFeedback = async (): Promise<UserFeedback[] | null> => {
-  const result = await prisma.userFeedback.findMany({});
+  const result = await prisma.userFeedback.findMany({include: {user: true}});
   return result;
 };
 

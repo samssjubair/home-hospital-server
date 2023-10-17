@@ -26,6 +26,7 @@ const getAllFromDB = async (
   filters: IHomeServiceFilterRequest,
   options: IPaginationOptions
 ): Promise<IGenericResponse<Service[]>> => {
+  // console.log(options)
   const { size, page, skip } = paginationHelpers.calculatePagination(options);
   const { searchTerm, ...filterData } = filters;
 
@@ -51,8 +52,21 @@ const getAllFromDB = async (
               id: (filterData as any)[key],
             },
           };
-        }
-        else {
+        } else if (key === 'minPrice') {
+          // Handle minPrice filtering
+          return {
+            price: {
+              gte: parseFloat(filterData[key] as any), // Convert to float
+            },
+          };
+        } else if (key === 'maxPrice') {
+          // Handle maxPrice filtering
+          return {
+            price: {
+              lte: parseFloat(filterData[key] as any), // Convert to float
+            },
+          };
+        } else {
           return {
             [key]: {
               equals: (filterData as any)[key],
@@ -63,14 +77,19 @@ const getAllFromDB = async (
     });
   }
 
-
-  
-
   const whereConditions: Prisma.ServiceWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
   const result = await prisma.service.findMany({
     where: whereConditions,
+    include: {
+      category: true,
+      reviews: {
+        include: {
+          user: true,
+        },
+      },
+    },
     skip,
     take: size,
     orderBy:
@@ -95,15 +114,115 @@ const getAllFromDB = async (
   };
 };
 
+
+// const getAllFromDB = async (
+//   filters: IHomeServiceFilterRequest,
+//   options: IPaginationOptions
+// ): Promise<IGenericResponse<Service[]>> => {
+//   // console.log(options)
+//   const { size, page, skip } = paginationHelpers.calculatePagination(options);
+//   const { searchTerm, ...filterData } = filters;
+
+//   const andConditions = [];
+
+//   if (searchTerm) {
+//     andConditions.push({
+//       OR: homeServiceSearchableFields.map(field => ({
+//         [field]: {
+//           contains: searchTerm,
+//           mode: 'insensitive',
+//         },
+//       })),
+//     });
+//   }
+
+//  if (Object.keys(filterData).length > 0) {
+//     andConditions.push({
+//       AND: Object.keys(filterData).map(key => {
+//         if (homeServiceRelationalFields.includes(key)) {
+//           return {
+//             [homeServiceRelationalFieldsMapper[key]]: {
+//               id: (filterData as any)[key],
+//             },
+//           };
+//         } else if (key === "minPrice") {
+//           // Handle minPrice filtering
+//           return {
+//             price: {
+//               gte: (filterData as any)[key],
+//             },
+//           };
+//         } else if (key === "maxPrice") {
+//           // Handle maxPrice filtering
+//           return {
+//             price: {
+//               lte: (filterData as any)[key],
+//             },
+//           };
+//         } else {
+//           return {
+//             [key]: {
+//               equals: (filterData as any)[key],
+//             },
+//           };
+//         }
+//       }),
+//     });
+//   }
+
+
+  
+
+//   const whereConditions: Prisma.ServiceWhereInput =
+//     andConditions.length > 0 ? { AND: andConditions } : {};
+
+//   const result = await prisma.service.findMany({
+//     where: whereConditions,
+//     include: {
+//       category: true,
+//       reviews: {
+//         include: {
+//           user: true,
+//         },
+//       },
+//     },
+//     skip,
+//     take: size,
+//     orderBy:
+//       options.sortBy && options.sortOrder
+//         ? { [options.sortBy]: options.sortOrder }
+//         : {
+//             createdAt: 'desc',
+//           },
+//   });
+//   const total = await prisma.service.count({
+//     where: whereConditions,
+//   });
+
+//   return {
+//     meta: {
+//       total,
+//       page,
+//       size,
+//       totalPage: Math.ceil(total / size),
+//     },
+//     data: result,
+//   };
+// };
+
 const getByIdFromDB = async (id: string): Promise<Service | null> => {
   const result = await prisma.service.findUnique({
     where: {
       id,
     },
-    include:{
+    include: {
       category: true,
-      reviews: true,
-    }
+      reviews: {
+        include: {
+          user: true,
+        },
+      },
+    },
   });
   return result;
 };

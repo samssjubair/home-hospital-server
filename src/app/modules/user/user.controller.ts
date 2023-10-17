@@ -7,6 +7,20 @@ import sendResponse from '../../../shared/sendResponse';
 import { studentFilterableFields } from './user.constants';
 import { UserService } from './user.service';
 
+const getMyInfo= catchAsync(async (req: Request, res: Response) => {
+  // console.log(req.user);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { id } = req.user as any;
+    const result = await UserService.getByIdFromDB(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User fetched successfully',
+        data: result
+    });
+}
+)
+
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     const result = await UserService.insertIntoDB(req.body);
     sendResponse(res, {
@@ -90,5 +104,6 @@ export const UserController = {
     getByIdFromDB,
     updateIntoDb,
     deleteFromDB,
-    loginUser
+    loginUser,
+    getMyInfo
 };

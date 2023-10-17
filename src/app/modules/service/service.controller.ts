@@ -18,7 +18,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, homeServiceFilterableFields);
-  const options = pick(req.query, ['size', 'size', 'sortBy', 'sortOrder']);
+  const options = pick(req.query, ['size', 'page', 'sortBy', 'sortOrder']);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result = await HomeServiceService.getAllFromDB(filters as any, options);
   sendResponse(res, {
