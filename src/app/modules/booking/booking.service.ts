@@ -32,12 +32,21 @@ const getAllFromDB = async (
 
   if (role === 'admin') {
     // If the role is 'admin', fetch all orders
-    result = await prisma.booking.findMany();
+    result = await prisma.booking.findMany({
+      include: {
+        user: true,
+        service: true,
+      },
+    });
   } else if (role === 'customer' && userId) {
     // If the role is 'customer' and userId is provided, fetch orders for that user
     result = await prisma.booking.findMany({
       where: {
         userId: userId,
+      },
+      include: {
+        user: true,
+        service: true,
       },
     });
   }
@@ -47,6 +56,17 @@ const getAllFromDB = async (
   };
 };
 
+const getAllBookingFromUserId= async (id: string): Promise<Booking[]> => {
+  const result = await prisma.booking.findMany({
+    where: {
+      userId: id,
+    },
+    include: {
+      service: true,
+    }
+  });
+  return result;
+}
 
 const getByIdFromDB = async (id: string): Promise<Booking | null> => {
   const result = await prisma.booking.findUnique({
@@ -85,4 +105,5 @@ export const BookingService = {
   getByIdFromDB,
   updateById,
   deleteFromDB,
+  getAllBookingFromUserId,
 };

@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get(
   '/',
-  auth(ENUM_USER_ROLE.ADMIN),
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   UserController.getAllFromDB
 );
 
@@ -21,21 +21,21 @@ router.get(
   UserController.getMyInfo
 );
 
-router.get('/:id', auth(ENUM_USER_ROLE.ADMIN), UserController.getByIdFromDB);
+router.get('/:id', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), UserController.getByIdFromDB);
 
 
 
 router.patch(
   '/:id',
-  auth(ENUM_USER_ROLE.ADMIN),
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   validateRequest(UserValidation.update),
   UserController.updateIntoDb
 );
 
 router.delete(
-    '/:id',
-    auth(ENUM_USER_ROLE.ADMIN),
-    UserController.deleteFromDB
-)
+  '/:id',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  UserController.deleteFromDB
+);
 
 export const userRoutes = router;

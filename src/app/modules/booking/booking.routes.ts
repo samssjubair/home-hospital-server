@@ -13,6 +13,13 @@ router.get(
   BookingController.getAllFromDB
 );
 
+router.get(
+  '/get-my-booking',
+  auth(ENUM_USER_ROLE.USER),
+  BookingController.getAllBookingFromUserId
+);
+
+
 router.get('/:id', BookingController.getByIdFromDB);
 
 router.post(

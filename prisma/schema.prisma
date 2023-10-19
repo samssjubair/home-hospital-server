@@ -83,6 +83,7 @@ model Booking {
 
 enum BookingStatus {
   booked
+  processing
   completed
   canceled
 }

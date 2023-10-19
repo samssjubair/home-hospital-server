@@ -24,7 +24,7 @@ const getByIdFromDB = async (id: string): Promise<UserFeedback | null> => {
 };
 
 const getAllFeedback = async (): Promise<UserFeedback[] | null> => {
-  const result = await prisma.userFeedback.findMany({include: {user: true}});
+  const result = await prisma.userFeedback.findMany({include: {user: true}, take: 4});
   return result;
 };
 

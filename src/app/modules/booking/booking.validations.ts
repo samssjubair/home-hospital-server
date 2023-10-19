@@ -14,7 +14,7 @@ const update = z.object({
     userId: z.string().optional(),
     serviceId: z.string().optional(),
     // appointment: z.date().optional(), // Assuming it's a valid date string or Date object
-    status: z.enum(['booked', 'completed', 'canceled']).optional(),
+    status: z.enum(['booked','processing', 'completed', 'canceled']).optional(),
   }),
 });
 

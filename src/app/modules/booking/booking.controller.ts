@@ -64,10 +64,23 @@ const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllBookingFromUserId = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.user as any;
+  const result = await BookingService.getAllBookingFromUserId(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Booking deleted successfully',
+    data: result,
+  });
+}
+);
+
 export const BookingController = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
   updateIntoDb,
   deleteFromDB,
+  getAllBookingFromUserId
 };

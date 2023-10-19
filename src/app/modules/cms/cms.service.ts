@@ -26,6 +26,7 @@ const getCMSUsingType = async (type: any): Promise<CMSContent[] | null> => {
     where: {
       contentType: type,
     },
+    take: 4,
   });
   return result;
 };

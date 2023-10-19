@@ -9,14 +9,14 @@ import ApiError from '../../../errors/ApiError';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import prisma from '../../../shared/prisma';
 import {
-    studentRelationalFields,
-    studentRelationalFieldsMapper,
-    studentSearchableFields,
+  studentRelationalFields,
+  studentRelationalFieldsMapper,
+  studentSearchableFields,
 } from './user.constants';
 import {
-    ILoginUser,
-    ILoginUserResponse,
-    IStudentFilterRequest,
+  ILoginUser,
+  ILoginUserResponse,
+  IStudentFilterRequest,
 } from './user.interface';
 
 const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
@@ -56,6 +56,7 @@ const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
     refreshToken,
   };
 };
+
 
 const insertIntoDB = async (data: User): Promise<User> => {
   const result = await prisma.user.create({
